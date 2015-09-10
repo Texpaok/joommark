@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `#__joommark_traffic`; 
