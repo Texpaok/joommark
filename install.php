@@ -113,6 +113,37 @@ class com_JoommarkInstallerScript {
 		// Array to store uninstall results
 		$result = array();
 		
+		$db = JFactory::getDbo();
+		
+		$columnName      = $db->quoteName("extension_id");
+		$tableExtensions = $db->quoteName("#__extensions");
+		$type 			 = $db->quoteName("type");
+		$columnElement   = $db->quoteName("element");
+		$columnType      = $db->quoteName("folder");
+		$result = '';
+            
+		// Uninstall Tracker plugin
+		$db->setQuery(
+			"SELECT 
+				$columnName
+			FROM
+				$tableExtensions
+			WHERE
+				$type='plugin'
+			AND
+				$columnElement='tracker'
+			AND
+				$columnType='system'"
+		
+		);
+
+		$id = $db->loadResult();
+
+		if ($id) {
+			$installer = new JInstaller();
+			$result[1] = $installer->uninstall('plugin',$id,1);		
+		}
+		
 				
 	}
 				

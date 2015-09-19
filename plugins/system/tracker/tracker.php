@@ -13,7 +13,8 @@ if(!class_exists('BrowserDetection')){
     include_once JPATH_ADMINISTRATOR . '/components/com_joommark/helpers/BrowserDetection.php';
 }
 
-class plgSystemTracker extends JPlugin{
+class plgSystemTracker extends JPlugin
+{
 	
 	
 	function plgSystemTracker( &$subject, $config ){
@@ -31,7 +32,7 @@ class plgSystemTracker extends JPlugin{
 	
 	function onAfterInitialise(){
 	
-						
+		$db = JFactory::getDbo();				
 		$app = JFactory::getApplication();
 
         // We store only front-end visits
@@ -44,30 +45,47 @@ class plgSystemTracker extends JPlugin{
         if (!empty($browser_data)) {
             $this->browser = $browser_data->getBrowser();
 			$this->browser_version = $browser_data->getVersion();
-			$platform = $browser_data->getPlatform();
-			$is_mobile = $browser_data->isMobile();
-			$is_robot = $browser_data->isRobot();
-			$request_uri = $_SERVER['REQUEST_URI'];			
+			$this->platform = $browser_data->getPlatform();
+			$this->is_mobile = $browser_data->isMobile();
+			$this->is_robot = $browser_data->isRobot();
+			$this->uri = $_SERVER['REQUEST_URI'];	
+			$this->ip = $_SERVER['REMOTE_ADDR'];			
         } else {
             $this->browser = JText::_('COM_JOOMMARK_UNKNOW');
             $this->browser_version = JText::_('COM_JOOMMARK_UNKNOW');
-            $platform = JText::_('COM_JOOMMARK_UNKNOW');
+            $this->platform = JText::_('COM_JOOMMARK_UNKNOW');
         }
 
+		// We need the referer to track where is the user
         if (isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] != "") {
-            $referer = $_SERVER['HTTP_REFERER'];			
+            $this->referer = $_SERVER['HTTP_REFERER'];			
         } else {
-            $referer = JText::_('COM_CWTRAFFIC_UNKNOWN');
+            $this->referer = JText::_('COM_JOOMMARK_UNKNOW');
         }
 		
-		// Let's store the data
-        //$store_data = new DatabaseAux();
+		// Get the user name
+		$user = JFactory::getUser()->name;
 		
-		$kk = DatabaseAux::add_to_database("kk","oo");
+		// Update joommark_stats table
+		$query = "INSERT INTO #__joommark_stats (ip, nowpage, lastupdate_time,  current_name)" .
+				"VALUES ( '" . $this->ip . "','" . $this->uri . "',NOW(),'" . $user . "') ON DUPLICATE KEY UPDATE nowpage = '" . $this->referer . "', lastupdate_time = NOW(), current_name = '" . $user . "' ";
+		$db->setQuery($query);
+		
+		try
+		{
+			$db->execute();			
+		} catch (Exception $e)
+		{
+			//dump($e->getMessage(),"exception");
+		}
 		
 
 	}
 	
+	function onAfterRoute()
+	{
+			
+	}
 	
 	
 		

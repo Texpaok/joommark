@@ -56,9 +56,9 @@ JHTML::stylesheet($opa_icons);
 			<fieldset>
 			<legend><?php echo JText::_('COM_JOOMMARK_OPTIONS'); ?></legend>
 			<div class="icon">
-				<a href="<?php echo JRoute::_( 'index.php?option=com_joomark&'. JSession::getFormToken() .'=1' );?>">
-				<div class="sc-icon-check_vuln">&nbsp;</div>
-				<span><?php echo JText::_('Test'); ?></span>
+				<a href="<?php echo JRoute::_( 'index.php?option=com_joommark&controller=visitors&view=visitors&'. JSession::getFormToken() .'=1' );?>">
+				<div class="sc-icon-visitors">&nbsp;</div>
+				<span><?php echo JText::_('COM_JOOMMARK_VISITORS_INFO'); ?></span>
 				</a>
 			</div>						
 			

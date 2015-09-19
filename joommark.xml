@@ -13,24 +13,23 @@
 <!-- Runs on install/uninstall/update; New in 1.6 -->
 	<scriptfile>install.php</scriptfile>
 
-<install>
-<sql>
-<file charset="utf8" driver="mysql">sql/install.sql</file>
-</sql>
-</install>
-<uninstall>
-<sql>
-<file charset="utf8" driver="mysql">sql/uninstall.sql</file>
-</sql>
-</uninstall>
-<update>
-	<schemas>
-		<schemapath type="mysql">sql/updates</schemapath>
-	</schemas>
-</update>
+ <install>
+        <sql>
+            <file charset="utf8" driver="mysql">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <uninstall>
+        <sql>
+            <file charset="utf8" driver="mysql">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates</schemapath>
+        </schemas>
+    </update>
 
 <media destination="com_joommark" folder="media">
-	<filename>index.html</filename>
 	<folder>images</folder>
 	<folder>stylesheets</folder>
 	<folder>fonts</folder>
@@ -42,7 +41,6 @@
 <!-- Administration Main File Copy Section -->
 <files folder="admin">
 <filename>joommark.php</filename>
-<filename>index.html</filename>
 <filename>config.xml</filename>
 <filename>access.xml</filename>
 <folder>controllers</folder>

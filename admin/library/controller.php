@@ -25,6 +25,11 @@ function __construct()
 parent::__construct();
 }
 
+/* Redirecciona las peticiones al Panel de Control */
+function redireccion_control_panel()
+{
+	$this->setRedirect( 'index.php?option=com_joommark' );
+}
 
 
 }
