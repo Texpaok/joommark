@@ -9,17 +9,18 @@ CREATE TABLE IF NOT EXISTS `#__joommark_stats` (
 
 -- If the url changed, we take information from #__joommark_stats to this table. For the seconds we count the difference between the actual time and #__joommark_stats.lastupdate_time.
 CREATE TABLE IF NOT EXISTS `#__joommark_serverstats` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `ip`                varchar(255),  
   `user_id_person` INT NULL DEFAULT 0,
   `customer_name`     varchar(255), 
-  `visitdate`         date,
+  `visitdate`         DATETIME,
   `visit_timestamp`   int, 
-  `visitedpage`       varchar(255), 
+  `visitedpages`       varchar(255), 
   `geolocation`       varchar(255), 
   `browser`           varchar(255), 
   `os`                varchar(255),
   `seconds` INT NOT NULL DEFAULT 0,
-  PRIMARY KEY (`ip` ,  `visitdate` ,  `visitedpage`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARACTER SET `utf8`; 
 
 -- perhaps referrals are interesting for a target

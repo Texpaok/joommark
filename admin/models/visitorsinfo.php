@@ -9,11 +9,9 @@
 // Chequeamos si el archivo está incluído en Joomla!
 defined('_JEXEC') or die();
 jimport( 'joomla.application.component.model' );
+jimport( 'joomla.access.rule' );
 
-/**
-* Modelo Vulninfo
-*/
-class JoommarksModelVisitors extends JModelList
+class JoommarksModelVisitorsInfo extends JModelList
 {
 
 
@@ -21,7 +19,7 @@ public function __construct($config = array()) {
 	
 	if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                'ip', 'nowpage', 'lastupdate_time', 'current_name'
+                'ip', 'visitdate', 'visitedpages', 'browser', 'os'
             );
         }
 
@@ -34,12 +32,15 @@ protected function populateState($ordering = null, $direction = null)
 	// Inicializamos las variables
 	$app		= JFactory::getApplication();
 	
-	$visitors_search = $app->getUserStateFromRequest('filter_visitors.search', 'filter_visitors_search');
-	$this->setState('filter_visitors.search', $visitors_search);
+	$visitors_info_search = $app->getUserStateFromRequest('filter_visitors_info.search', 'filter_visitors_info_search');
+	$this->setState('filter_visitors_info.search', $visitors_info_search);
 	
-		
+	// Let's see if we need to filter data. This happens when a query comes from icon-eye pf visitors view.
+	$ip_to_search = $app->getUserState("ip_to_search");
+	$this->setState('filter_visitors_info.search', $ip_to_search);
+				
 	 // List state information.
-        parent::populateState('ip', 'desc');
+        parent::populateState('visitdate', 'desc');
 }
 
 
@@ -53,38 +54,33 @@ public function getListQuery()
 	$query = $db->getQuery(true);
 	
 	// Sanitizamos la entrada
-	$search = $this->state->get('filter_visitors.search');
+	$search = $this->state->get('filter_visitors_info.search');
 	$search = $db->Quote('%'.$db->escape($search, true).'%');
 		
 	$query->select('*');
-	$query->from('#__joommark_stats AS a');
+	$query->from('#__joommark_serverstats AS a');
 	
 	
-	$query->where('(a.ip LIKE '.$search.' OR a.nowpage LIKE '.$search.' OR a.lastupdate_time LIKE '.$search.' OR a.current_name LIKE '.$search.')');
+	$query->where('(a.ip LIKE '.$search.' OR a.visitdate LIKE '.$search.' OR a.visitedpages LIKE '.$search.' OR a.browser LIKE '.$search.' OR a.os LIKE '.$search.')');
 	
 	// Add the list ordering clause.
-    $query->order($db->escape($this->getState('list.ordering', 'ip')) . ' ' . $db->escape($this->getState('list.direction', 'desc')));
+    $query->order($db->escape($this->getState('list.ordering', 'visitdate')) . ' ' . $db->escape($this->getState('list.direction', 'desc')));
 	
 	return $query;
 }
 
 /* Function to delete joommark_stats entries */
 function delete(){
-	/*$uids = JRequest::getVar('cid', 0, '', 'array');
-	
-	JArrayHelper::toInteger($uids, array());
-	
-	dump($uids,"uids");*/
 	
 	// Create the JInput object to retrieve form variables
 	$jinput = JFactory::getApplication()->input;
 	
 	// Array of IPs to delete
-	$ips_to_delete = $jinput->get('ip_array',null,'array');
-		
+	$entries_to_delete = $jinput->get('cid',null,'array');
+	
 	$db = $this->getDbo();
-	foreach($ips_to_delete as $ip) {
-		$sql = "DELETE FROM `#__joommark_stats` WHERE ip='{$ip}'";
+	foreach($entries_to_delete as $id) {
+		$sql = "DELETE FROM `#__joommark_serverstats` WHERE id='{$id}'";
 		$db->setQuery($sql);
 		$db->execute();	
 	}

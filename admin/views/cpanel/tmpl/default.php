@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted Access');
 $lang = JFactory::getLanguage();
 $lang->load('com_joommark.sys');
 
-$review = sprintf( $lang->_('COM_SECURITYCHECKPRO_REVIEW'), '<a href="http://extensions.joomla.org/extensions/extension/access-a-security/site-security/securitycheck-pro" target="_blank">', '</a>' );
+	$review = sprintf( $lang->_('COM_SECURITYCHECKPRO_REVIEW'), '<a href="http://extensions.joomla.org/extensions/extension/access-a-security/site-security/securitycheck-pro" target="_blank">', '</a>' );
 $translator_name = $lang->_('COM_SECURITYCHECKPRO_TRANSLATOR_NAME');
 $firewall_plugin_status = $lang->_('COM_SECURITYCHECKPRO_FIREWALL_PLUGIN_STATUS');
 $cron_plugin_status = $lang->_('COM_SECURITYCHECKPRO_CRON_PLUGIN_STATUS');
@@ -54,17 +54,22 @@ JHTML::stylesheet($opa_icons);
 			</div>
 		<div class="box-content">
 			<fieldset>
-			<legend><?php echo JText::_('COM_JOOMMARK_OPTIONS'); ?></legend>
-			<div class="icon">
-				<a href="<?php echo JRoute::_( 'index.php?option=com_joommark&controller=visitors&view=visitors&'. JSession::getFormToken() .'=1' );?>">
-				<div class="sc-icon-visitors">&nbsp;</div>
-				<span><?php echo JText::_('COM_JOOMMARK_VISITORS_INFO'); ?></span>
-				</a>
-			</div>						
-			
-		</fieldset>
-		
-		
+				<legend><?php echo JText::_('COM_JOOMMARK_OPTIONS'); ?></legend>
+				<div class="icon">
+					<a href="<?php echo JRoute::_( 'index.php?option=com_joommark&controller=visitors&view=visitors&'. JSession::getFormToken() .'=1' );?>">
+					<div class="joommark-icon-visitors">&nbsp;</div>
+					<span><?php echo JText::_('COM_JOOMMARK_VISITORS'); ?></span>
+					</a>
+				</div>	
+				
+				<div class="icon">
+					<a href="<?php echo JRoute::_( 'index.php?option=com_joommark&controller=visitorsinfo&view=visitorsinfo&'. JSession::getFormToken() .'=1' );?>">
+					<div class="joommark-icon-visitors_info">&nbsp;</div>
+					<span><?php echo JText::_('COM_JOOMMARK_VISITORS_INFO'); ?></span>
+					</a>
+				</div>	
+			</fieldset>
+					
 		</div>
 		</div>
 		

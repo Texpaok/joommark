@@ -15,7 +15,7 @@ jimport( 'joomla.plugin.helper' );
 * Logs View
 *
 */
-class JoommarksViewVisitors extends JViewLegacy
+class JoommarksViewVisitorsInfo extends JViewLegacy
 {
 
 	protected $items;
@@ -38,7 +38,7 @@ JToolBarHelper::custom('delete','delete','delete','COM_JOOMMARK_DELETE');
 		$this->state= $this->get('State');
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
-		$filter_search = $this->state->get('filter_visitors.search');
+		$filter_search = $this->state->get('filter_visitors_info.search');
 		
 		$listDirn = $this->state->get('list.direction');
 		$listOrder =  $this->state->get('list.ordering');

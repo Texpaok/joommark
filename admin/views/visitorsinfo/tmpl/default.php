@@ -8,7 +8,6 @@
 
 defined('_JEXEC') or die('Restricted access'); 
 
-jimport( 'joomla.application.component.model' );
 
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
@@ -26,15 +25,15 @@ JHTML::stylesheet($bootstrap_css);
 ?>
 
 
-<form action="<?php echo JRoute::_('index.php?option=com_joommark&view=visitors');?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_joommark&view=visitorsinfo');?>" method="post" name="adminForm" id="adminForm">
 
 <div id="filter-bar" class="btn-toolbar">
 	<div class="filter-search btn-group pull-left">
-		<input type="text" name="filter_visitors_search" placeholder="<?php echo JText::_('JSEARCH_FILTER_LABEL'); ?>" id="filter_visitors_search" value="<?php echo $this->escape($this->state->get('filter_visitors.search')); ?>" title="<?php echo JText::_('JSEARCH_FILTER'); ?>" />
+		<input type="text" name="filter_visitors_info_search" placeholder="<?php echo JText::_('JSEARCH_FILTER_LABEL'); ?>" id="filter_visitors_info_search" value="<?php echo $this->escape($this->state->get('filter_visitors_info.search')); ?>" title="<?php echo JText::_('JSEARCH_FILTER'); ?>" />
 	</div>
 	<div class="btn-group pull-left">
 		<button class="btn tip" type="submit" rel="tooltip" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-		<button class="btn tip" type="button" onclick="document.getElementById('filter_visitors_search').value='';this.form.submit();" rel="tooltip" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+		<button class="btn tip" type="button" onclick="document.getElementById('filter_visitors_info_search').value='';this.form.submit();" rel="tooltip" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
 	</div>
 </div>
 
@@ -51,14 +50,23 @@ JHTML::stylesheet($bootstrap_css);
 				<?php echo JHtml::_('grid.sort', 'Ip', 'ip', $listDirn, $listOrder); ?>
 			</th>
 			<th class="logs" align="center">
-				<?php echo JHtml::_('grid.sort', 'COM_JOOMMARK_LAST_PAGE_VISITED', 'nowpage', $listDirn, $listOrder); ?>				
+				<?php echo JHtml::_('grid.sort', 'COM_JOOMMARK_CUSTOMER_NAME', 'customer_name', $listDirn, $listOrder); ?>				
 			</th>
 			<th class="logs" align="center">
-				<?php echo JHtml::_('grid.sort', 'COM_JOOMMARK_TIME', 'lastupdate_time', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort', 'COM_JOOMMARK_VISITDATE', 'visitdate', $listDirn, $listOrder); ?>
 			</th>
 			<th class="logs" align="center">
-				<?php echo JHtml::_('grid.sort', 'COM_JOOMMARK_USER', 'current_name', $listDirn, $listOrder); ?>
+				<?php echo JHtml::_('grid.sort', 'COM_JOOMMARK_VISITEDPAGES', 'visitedpages', $listDirn, $listOrder); ?>
 			</th>
+			<th class="logs" align="center">
+				<?php echo JHtml::_('grid.sort', 'COM_JOOMMARK_GEOLOCATION', 'geolocation', $listDirn, $listOrder); ?>
+			</th>
+			<th class="logs" align="center">
+				<?php echo JHtml::_('grid.sort', 'COM_JOOMMARK_BROWSER', 'browser', $listDirn, $listOrder); ?>
+			</th>
+			<th class="logs" align="center">
+				<?php echo JHtml::_('grid.sort', 'COM_JOOMMARK_OS', 'os', $listDirn, $listOrder); ?>
+			</th>			
 			<th class="logs" align="center">
 				<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this)" />
 			</th>
@@ -70,33 +78,28 @@ foreach ($this->items as &$row) {
 ?>
 <tr>
 	<td align="center">
-			<?php echo $row->ip; ?>
-			<span title="<?php echo JText::_('COM_JOOMMARK_VISITOR_INFO'); ?>">
-                <a href="<?php echo JRoute::_( 'index.php?option=com_joommark&controller=visitorsinfo&view=visitorsinfo&filter=' . $row->ip . '&'. JSession::getFormToken() .'=1' );?>" ">
-					<i class="icon-eye-open"></i>
-                </a>
-            </span>
+			<?php echo $row->ip; ?>			
 	</td>
 	<td align="center">
-			<?php echo $row->nowpage; ?>	
+			<?php echo $row->customer_name; ?>	
 	</td>
 	<td align="center">
-			<?php echo $row->lastupdate_time; ?>
+			<?php echo $row->visitdate; ?>	
 	</td>
 	<td align="center">
-			<?php 
-				if ( empty($row->current_name) ) {
-					$span = "<span class=\"label \">";
-					$row->current_name = JText::_('COM_JOOMMARK_NONE');
-				} else {
-					$span = "<span class=\"label label-success\">";
-				}
-			?>
-			<?php echo $span . $row->current_name; ?>
-			</span>			
+			<?php echo $row->visitedpages; ?>
+	</td>
+	<td align="center">
+			<?php echo $row->geolocation; ?>	
+	</td>
+	<td align="center">
+			<?php echo $row->browser; ?>	
+	</td>
+	<td align="center">
+			<?php echo $row->os; ?>	
 	</td>
 	<td align="center">			
-			<?php echo JHtml::_('grid.id', $k, $row->ip, '', 'ip_array'); ?>
+			<?php echo JHtml::_('grid.id', $k, $row->id); ?>
 	</td>	
 </tr>
 <?php
@@ -126,7 +129,7 @@ if ( !empty($this->items) ) {
 <input type="hidden" name="option" value="com_joommark" />
 <input type="hidden" name="task" value="" />
 <input type="hidden" name="boxchecked" value="1" />
-<input type="hidden" name="controller" value="visitors" />
+<input type="hidden" name="controller" value="visitorsinfo" />
 <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
 <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
 

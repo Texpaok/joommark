@@ -9,7 +9,8 @@
 /*
  * Icons 
  */
-.sc-icon-check_vuln { display: block; width: 32px; height: 32px; text-indent: -99999px; overflow: hidden;  background: transparent url(../images/check_vulnerabilities.png) top left no-repeat; margin: 4px auto 6px; }
+.joommark-icon-visitors { display: block; width: 32px; height: 32px; text-indent: -99999px; overflow: hidden;  background: transparent url(../images/visitors.png) top left no-repeat; margin: 4px auto 6px; }
+.joommark-icon-visitors_info{ display: block; width: 32px; height: 32px; text-indent: -99999px; overflow: hidden;  background: transparent url(../images/visitors_info.png) top left no-repeat; margin: 4px auto 6px; }
 
 
 /*
@@ -818,4 +819,9 @@ text-align: center; }
 
 .columna {
 	color: #585858;
+}
+
+div.pagination 
+{
+margin:auto auto 20px 20px;
 }

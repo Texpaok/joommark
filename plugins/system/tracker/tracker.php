@@ -12,10 +12,11 @@ jimport( 'joomla.plugin.plugin' );
 if(!class_exists('BrowserDetection')){
     include_once JPATH_ADMINISTRATOR . '/components/com_joommark/helpers/BrowserDetection.php';
 }
-
+	
 class plgSystemTracker extends JPlugin
 {
-	
+	// Variables initialization
+	private $visitors = array();
 	
 	function plgSystemTracker( &$subject, $config ){
 		parent::__construct( $subject, $config );
@@ -31,7 +32,7 @@ class plgSystemTracker extends JPlugin
 	
 	
 	function onAfterInitialise(){
-	
+		
 		$db = JFactory::getDbo();				
 		$app = JFactory::getApplication();
 
@@ -66,9 +67,22 @@ class plgSystemTracker extends JPlugin
 		// Get the user name
 		$user = JFactory::getUser()->name;
 		
-		// Update joommark_stats table
+		// Update 'joommark_stats' table
 		$query = "INSERT INTO #__joommark_stats (ip, nowpage, lastupdate_time,  current_name)" .
-				"VALUES ( '" . $this->ip . "','" . $this->uri . "',NOW(),'" . $user . "') ON DUPLICATE KEY UPDATE nowpage = '" . $this->referer . "', lastupdate_time = NOW(), current_name = '" . $user . "' ";
+				"VALUES ( '" . $this->ip . "','" . $this->referer . "',NOW(),'" . $user . "') ON DUPLICATE KEY UPDATE nowpage = '" . $this->referer . "', lastupdate_time = NOW(), current_name = '" . $user . "' ";
+		$db->setQuery($query);
+				
+		try
+		{
+			$db->execute();			
+		} catch (Exception $e)
+		{
+			//dump($e->getMessage(),"exception");
+		}
+		
+		// Update 'joommark_serverstats' table
+		$query = "INSERT INTO #__joommark_serverstats (ip, visitdate, visitedpages, browser, os)" .
+				"VALUES ( '" . $this->ip . "', NOW(), '" . $this->referer . "', '" . $this->browser . "', '" . $this->platform . "')";
 		$db->setQuery($query);
 		
 		try
